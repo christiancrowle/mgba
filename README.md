@@ -1,7 +1,7 @@
 mGBA
 ====
 
-mGBA is an emulator for running Game Boy Advance games. It aims to be faster and more accurate than many existing Game Boy Advance emulators, as well as adding features that other emulators lack. It also supports Game Boy and Game Boy Color games.
+mGBA is an emulator for running Game Boy Advance games. It aims to be faster and more accurate than many existing Game Boy Advance emulators, as well as adding features that other emulators lack. It also supports Game Boy and Game Boy Color games. This version outputs over VNC (don't ask), and the code is shittier than ever before (don't ask). It's also hardcoded to run Pokemon Ruby and Sapphire (don't ask). Why are you here?
 
 Up-to-date news and downloads can be found at [mgba.io](https://mgba.io/).
 

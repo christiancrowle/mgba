@@ -14,6 +14,8 @@
 #include <mgba/internal/gb/gb.h>
 #endif
 
+#include <QPainter>
+
 using namespace QGBA;
 
 #ifdef M_CORE_GB
@@ -106,7 +108,11 @@ MultiplayerController::MultiplayerController() {
 			controller->m_players[id].controller->setSync(true);
 			controller->m_players[id].cyclesPosted += cycles;
 		}
-	};
+
+        QPainter painter(&controller->g_vncoutput);
+        painter.drawImage(0, 0, controller->g_firstScreenOutput);
+        painter.drawImage(controller->g_secondScreenOutput.width(), 0, controller->g_secondScreenOutput);
+    };
 	m_lockstep.useCycles = [](mLockstep* lockstep, int id, int32_t cycles) {
 		MultiplayerController* controller = static_cast<MultiplayerController*>(lockstep->context);
 		Player* player = &controller->m_players[id];

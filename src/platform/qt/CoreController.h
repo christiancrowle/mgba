@@ -11,6 +11,7 @@
 #include <QMutex>
 #include <QObject>
 #include <QSize>
+#include <QImage>
 
 #include "VFileDevice.h"
 
@@ -32,6 +33,8 @@
 #ifdef M_CORE_GBA
 #include <mgba/gba/interface.h>
 #endif
+
+#include <rfb/rfb.h>
 
 struct mCore;
 
@@ -125,7 +128,6 @@ public:
 	bool videoSync() const { return m_videoSync; }
 
 	void addFrameAction(std::function<void ()> callback);
-
 public slots:
 	void start();
 	void stop();

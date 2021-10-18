@@ -132,6 +132,15 @@ Window* GBAApp::newWindow() {
 	w->loadConfig();
 	w->show();
 	w->multiplayerChanged();
+
+    if (m_windows.count() > 1) {
+        CoreController* core1 = m_manager.loadGame("ruby.gba");
+        m_windows[0]->setController(core1, "ruby.gba");
+
+        CoreController* core2 = m_manager.loadGame("sapphire.gba");
+        m_windows[1]->setController(core2, "sapphire.gba");
+    }
+
 	for (Window* w : m_windows) {
 		w->updateMultiplayerStatus(m_windows.count() < MAX_GBAS);
 	}

@@ -127,6 +127,8 @@ int main(int argc, char* argv[]) {
 
 	w->show();
 
+    GBAApp::app()->newWindow();
+
 	int ret = application.exec();
 	if (ret != 0) {
 		return ret;

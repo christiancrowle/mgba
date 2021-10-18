@@ -8,6 +8,9 @@
 #include <QMutex>
 #include <QList>
 #include <QObject>
+#include <QImage>
+
+#include <rfb/rfb.h>
 
 #include <mgba/core/lockstep.h>
 #ifdef M_CORE_GBA
@@ -37,7 +40,13 @@ public:
 	void detachGame(CoreController*);
 
 	int attached();
-	int playerId(CoreController*);
+    int playerId(CoreController*);
+
+    bool g_isSecondScreenReady = false;
+    QImage g_firstScreenOutput{nullptr};
+    QImage g_secondScreenOutput{nullptr};
+    rfbScreenInfoPtr g_vnc;
+    QImage g_vncoutput{nullptr};
 
 signals:
 	void gameAttached();
@@ -68,8 +77,8 @@ private:
 		GBASIOLockstep m_gbaLockstep;
 #endif
 	};
-	QList<Player> m_players;
-	QMutex m_lock;
+    QList<Player> m_players;
+    QMutex m_lock;
 };
 
 }

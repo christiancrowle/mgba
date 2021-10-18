@@ -315,7 +315,7 @@ if(WIN32)
 	endif()
 endif()
 
-list(APPEND QT_LIBRARIES Qt5::Widgets Qt5::Network)
+list(APPEND QT_LIBRARIES Qt5::Widgets Qt5::Network vncserver)
 if(BUILD_GL OR BUILD_GLES2 OR BUILD_EPOXY)
 	list(APPEND QT_LIBRARIES ${OPENGL_LIBRARY} ${OPENGLES2_LIBRARY})
 endif()

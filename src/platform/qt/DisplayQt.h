@@ -9,6 +9,7 @@
 
 #include <QImage>
 #include <QTimer>
+#include <rfb/rfb.h>
 
 namespace QGBA {
 
@@ -41,12 +42,17 @@ protected:
 	virtual void paintEvent(QPaintEvent*) override;
 
 private:
+    bool m_isSecondDisplay = true;
 	bool m_isDrawing = false;
 	int m_width;
 	int m_height;
 	QImage m_backing{nullptr};
-	QImage m_oldBacking{nullptr};
-	std::shared_ptr<CoreController> m_context = nullptr;
-};
+    QImage m_oldBacking{nullptr};
+    std::shared_ptr<CoreController> m_context = nullptr;
 
+    //QImage m_vncoutput{nullptr};
+    QImage m_secondScreenOutput{nullptr};
+
+    char* m_oldFrameBuffer;
+};
 }
