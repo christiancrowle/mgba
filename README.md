@@ -3,6 +3,8 @@ mGBA
 
 mGBA is an emulator for running Game Boy Advance games. It aims to be faster and more accurate than many existing Game Boy Advance emulators, as well as adding features that other emulators lack. It also supports Game Boy and Game Boy Color games. This version outputs over VNC (don't ask), and the code is shittier than ever before (don't ask). It's also hardcoded to run Pokemon Ruby and Sapphire (don't ask). Why are you here?
 
+THIS CODE IS NOW TAINTED, THERE'S GPL IN THERE GOD DAMMIT
+
 Up-to-date news and downloads can be found at [mgba.io](https://mgba.io/).
 
 [![Build status](https://buildbot.mgba.io/badges/build-win32.svg)](https://buildbot.mgba.io)
@@ -39,6 +41,7 @@ Features
 - Cores available for RetroArch/Libretro and OpenEmu.
 - Community-provided translations for several languages via [Weblate](https://hosted.weblate.org/engage/mgba).
 - Many, many smaller things.
+- Outputs over VNC for some godforsaken reason
 
 #### Game Boy mappers
 
@@ -92,7 +95,7 @@ Other Unix-like platforms, such as OpenBSD, are known to work as well, but are u
 
 ### System requirements
 
-Requirements are minimal. Any computer that can run Windows Vista or newer should be able to handle emulation. Support for OpenGL 1.1 or newer is also required, with OpenGL 3.2 or newer for shaders and advanced features.
+Requirements are minimal. Any computer that can run Windows Vista or newer should be able to handle emulation. Support for OpenGL 1.1 or newer is also required (but not if you try hard enough apparently), with OpenGL 3.2 or newer for shaders and advanced features.
 
 Downloads
 ---------
@@ -236,6 +239,8 @@ Footnotes
 
 <a name="osxver">[3]</a> 10.8 is only needed for the Qt port. It may be possible to build or running the Qt port on 10.7 or older, but this is not officially supported. The SDL port is known to work on 10.5, and may work on older.
 
+Don't even try to compile the Qt port for WASM or UWP (unless you're way better at it than me, which you are)
+
 [downloads]: http://mgba.io/downloads.html
 [source]: https://github.com/mgba-emu/mgba/
 
@@ -252,5 +257,6 @@ mGBA contains the following third-party libraries:
 - [MurmurHash3](https://github.com/aappleby/smhasher) implementation by Austin Appleby, which is public domain.
 - [getopt for MSVC](https://github.com/skandhurkat/Getopt-for-Visual-Studio/), which is public domain.
 - [SQLite3](https://www.sqlite.org), which is public domain.
+- LibVNCServer, which is GPL
 
 If you are a game publisher and wish to license mGBA for commercial usage, please email [licensing@mgba.io](mailto:licensing@mgba.io) for more information.
