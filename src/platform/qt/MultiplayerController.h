@@ -42,7 +42,7 @@ public:
 	int attached();
     int playerId(CoreController*);
 
-    bool g_isSecondScreenReady = false;
+    bool g_vncFrameReady = false;
     QImage g_firstScreenOutput{nullptr};
     QImage g_secondScreenOutput{nullptr};
     rfbScreenInfoPtr g_vnc;

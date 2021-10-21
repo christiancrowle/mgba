@@ -1081,6 +1081,10 @@ void CoreController::finishFrame() {
 	}
 	updateKeys();
 
+    int width = this->multiplayerController()->g_secondScreenOutput.width();
+    int height = this->multiplayerController()->g_secondScreenOutput.height();
+    rfbMarkRectAsModified(this->multiplayerController()->g_vnc, 0, 0, width * 2, height);
+
 	QMetaObject::invokeMethod(this, "frameAvailable");
 }
 
