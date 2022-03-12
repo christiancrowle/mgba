@@ -442,7 +442,7 @@ void rfbMarkRectAsModified(rfbScreenInfoPtr screen,int x1,int y1,int x2,int y2)
    if(y1==y2) return;
 
    /* update scaled copies for this rectangle */
-   rfbScaledScreenUpdate(screen,x1,y1,x2,y2);
+   //rfbScaledScreenUpdate(screen,x1,y1,x2,y2);
 
    region = sraRgnCreateRect(x1,y1,x2,y2);
    rfbMarkRegionAsModified(screen,region);
@@ -493,20 +493,20 @@ clientOutput(void *data)
         
         /* OK, now, to save bandwidth, wait a little while for more
            updates to come along. */
-	THREAD_SLEEP_MS(cl->screen->deferUpdateTime);
+    THREAD_SLEEP_MS(cl->screen->deferUpdateTime); // PoB: not anymore.
 
         /* Now, get the region we're going to update, and remove
            it from cl->modifiedRegion _before_ we send the update.
            That way, if anything that overlaps the region we're sending
            is updated, we'll be sure to do another update later. */
         LOCK(cl->updateMutex);
-	updateRegion = sraRgnCreateRgn(cl->modifiedRegion);
+    updateRegion = sraRgnCreateRgn(cl->modifiedRegion);
         UNLOCK(cl->updateMutex);
 
         /* Now actually send the update. */
 	rfbIncrClientRef(cl);
         LOCK(cl->sendMutex);
-        rfbSendFramebufferUpdate(cl, updateRegion);
+        rfbSendFramebufferUpdate(cl, cl->modifiedRegion);
         UNLOCK(cl->sendMutex);
 	rfbDecrClientRef(cl);
 

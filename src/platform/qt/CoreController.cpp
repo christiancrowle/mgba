@@ -13,6 +13,9 @@
 
 #include <QDateTime>
 #include <QMutexLocker>
+#include <QPainter>
+
+#include <iostream>
 
 #include <mgba/core/serialize.h>
 #include <mgba/feature/video-logger.h>
@@ -1056,6 +1059,7 @@ int CoreController::updateAutofire() {
 	return active;
 }
 
+int i = 0;
 void CoreController::finishFrame() {
 	if (!m_hwaccel) {
 		unsigned width, height;
@@ -1081,9 +1085,28 @@ void CoreController::finishFrame() {
 	}
 	updateKeys();
 
+    i++;
     int width = this->multiplayerController()->g_secondScreenOutput.width();
     int height = this->multiplayerController()->g_secondScreenOutput.height();
-    rfbMarkRectAsModified(this->multiplayerController()->g_vnc, 0, 0, width * 2, height);
+
+    //std::cout << i << std::endl;
+    //if (i == 1 || i == 3) {
+        //rfbMarkRectAsModified(this->multiplayerController()->g_vnc, 0, 0, width, height);
+    //} else {
+        //rfbMarkRectAsModified(this->multiplayerController()->g_vnc, width, 0, width, height);
+    //}
+
+    if (i == 4) {
+        if (this->multiplayerController()->g_vncFrameReady) {
+
+
+            this->multiplayerController()->g_vncFrameReady = false;
+        }
+
+        i = 0;
+    }
+
+    m_cycles++;
 
 	QMetaObject::invokeMethod(this, "frameAvailable");
 }

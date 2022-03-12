@@ -21,6 +21,7 @@
 #endif
 
 #include <memory>
+#include <chrono>
 
 struct GBSIOLockstepNode;
 struct GBASIOLockstepNode;
@@ -43,6 +44,7 @@ public:
     int playerId(CoreController*);
 
     bool g_vncFrameReady = false;
+    std::chrono::high_resolution_clock::time_point theTime;
     QImage g_firstScreenOutput{nullptr};
     QImage g_secondScreenOutput{nullptr};
     rfbScreenInfoPtr g_vnc;

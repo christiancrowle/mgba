@@ -136,6 +136,7 @@ void DisplayQt::startDrawing(std::shared_ptr<CoreController> controller) {
           m_context->multiplayerController()->g_vnc->httpDir = "web/";
           //m_context->multiplayerController()->g_vnc->httpPort = 28008;
           m_context->multiplayerController()->g_vnc->desktopName = "GBAIP";
+          m_context->multiplayerController()->g_vnc->deferUpdateTime = 0;
 
           m_context->multiplayerController()->g_vnc->kbdAddEvent = processRfbKeyEvent;
 
@@ -202,11 +203,6 @@ void DisplayQt::framePosted() {
     m_backing = QImage(reinterpret_cast<const uchar*>(buffer), m_width, m_height, QImage::Format_ARGB32);
     m_backing = m_backing.convertToFormat(QImage::Format_RGB32);
 #endif
-    if (!m_isSecondDisplay) {
-        m_context->multiplayerController()->g_firstScreenOutput = m_backing.copy(0, 0, m_width, m_height);
-    } else {
-        m_context->multiplayerController()->g_secondScreenOutput = m_backing.copy(0, 0, m_width, m_height);
-    }
 
 #ifndef COLOR_5_6_5
     m_backing = m_backing.rgbSwapped();
@@ -236,8 +232,28 @@ void DisplayQt::framePosted() {
         updateKey(m_context, 19, GBA_KEY_START);
     }
 
-    if (shouldSetFF) {
-        m_context->setFastForward(shouldSetFF);
+    //if (shouldSetFF) {
+    //m_context->setFastForward(shouldSetFF);
+    //m_context->forceFastForward(shouldSetFF);
+    //}
+
+    frameCount++;
+    std::cout << frameCount << std::endl;
+    if (frameCount == 2) {
+        if (!m_isSecondDisplay) {
+            m_context->multiplayerController()->g_firstScreenOutput = m_backing.rgbSwapped().copy(0, 0, m_width, m_height);
+            m_context->multiplayerController()->g_vncFrameReady = true;
+            QPainter painter(&m_context->multiplayerController()->g_vncoutput);
+            painter.drawImage(0, 0, m_context->multiplayerController()->g_firstScreenOutput);
+            painter.drawImage(m_context->multiplayerController()->g_secondScreenOutput.width(), 0, m_context->multiplayerController()->g_secondScreenOutput);
+
+            memcpy(m_context->multiplayerController()->g_vnc->frameBuffer, reinterpret_cast<char*>(m_context->multiplayerController()->g_vncoutput.bits()), m_width * 2 * m_height * 4);
+        } else {
+            m_context->multiplayerController()->g_secondScreenOutput = m_backing.rgbSwapped().copy(0, 0, m_width, m_height);
+        }
+
+        rfbMarkRectAsModified(m_context->multiplayerController()->g_vnc, 0, 0, m_width * 2, m_height);
+        frameCount = 0;
     }
 }
 
@@ -254,7 +270,6 @@ void DisplayQt::resizeContext() {
 	}
 }
 
-int frameCount = 0;
 void DisplayQt::paintEvent(QPaintEvent*) {
 	QPainter painter(this);
 	painter.fillRect(QRect(QPoint(), size()), Qt::black);
@@ -271,15 +286,5 @@ void DisplayQt::paintEvent(QPaintEvent*) {
 	painter.setOpacity(1);
 	if (isShowOSD()) {
 		messagePainter()->paint(&painter);
-    }
-
-    if (!m_isSecondDisplay) {
-        m_context->multiplayerController()->g_vncFrameReady = true;
-
-        frameCount++;
-        if (frameCount == 2) { // yes, i'm capping it at 30fps. rfbMarkRectAsModified is REALLY SLOW
-        // WAIT! I was running it with battery saver. lol
-            frameCount = 0;
-        }
     }
 }

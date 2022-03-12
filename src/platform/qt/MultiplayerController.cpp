@@ -15,6 +15,7 @@
 #endif
 
 #include <QPainter>
+#include <iostream>
 
 using namespace QGBA;
 
@@ -35,7 +36,7 @@ MultiplayerController::Player::Player(CoreController* coreController, GBASIOLock
 #endif
 
 MultiplayerController::MultiplayerController() {
-	mLockstepInit(&m_lockstep);
+    mLockstepInit(&m_lockstep);
 	m_lockstep.context = this;
 	m_lockstep.lock = [](mLockstep* lockstep) {
 		MultiplayerController* controller = static_cast<MultiplayerController*>(lockstep->context);
@@ -104,6 +105,11 @@ MultiplayerController::MultiplayerController() {
 					mCoreThreadStopWaiting(player->controller->thread());
 					player->awake = 1;
 				}
+
+                //if (player->controller->m_cycles % 900 == 0) {
+                //    std::cout << "state saved player " << i << std::endl;
+                //    player->controller->saveState(0);
+                //}
 			}
 		} else {
 			controller->m_players[id].controller->setSync(true);
@@ -113,15 +119,7 @@ MultiplayerController::MultiplayerController() {
         int width = controller->g_secondScreenOutput.width();
         int height = controller->g_secondScreenOutput.height();
 
-        if (controller->g_vncFrameReady) {
-            QPainter painter(&controller->g_vncoutput);
-            painter.drawImage(0, 0, controller->g_firstScreenOutput);
-            painter.drawImage(controller->g_secondScreenOutput.width(), 0, controller->g_secondScreenOutput);
 
-            memcpy(controller->g_vnc->frameBuffer, reinterpret_cast<char*>(controller->g_vncoutput.bits()), width * 2 * height * 4);
-
-            controller->g_vncFrameReady = false;
-        }
     };
 	m_lockstep.useCycles = [](mLockstep* lockstep, int id, int32_t cycles) {
 		MultiplayerController* controller = static_cast<MultiplayerController*>(lockstep->context);

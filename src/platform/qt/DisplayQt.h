@@ -52,6 +52,7 @@ private:
 
     //QImage m_vncoutput{nullptr};
     QImage m_secondScreenOutput{nullptr};
+    int frameCount = 0;
 
     char* m_oldFrameBuffer;
 };

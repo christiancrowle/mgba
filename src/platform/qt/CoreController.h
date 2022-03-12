@@ -50,6 +50,7 @@ class CoreController : public QObject {
 Q_OBJECT
 
 public:
+    long long m_cycles = 0;
 	static const bool VIDEO_SYNC = false;
 	static const bool AUDIO_SYNC = true;
 
